@@ -2,3 +2,4 @@
 *.ical*
 *.ics*
 *.venv*
+__pychache__/

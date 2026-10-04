@@ -1,14 +1,16 @@
 from icalendar import Calendar
 
+# Open calendar file
 def open_cal(path: str) -> Calendar:
     with open(path, "rb") as f:
         return Calendar.from_ical(f.read())
 
+# Write to new calendar file
 def export_cal(path: str, cal: Calendar):
-    with open(f"edited_{path}", "wb") as f:
+    with open(f"{path}_edited.ics", "wb") as f:
         f.write(cal.to_ical())
 
-
+# Print calendar to console
 def print_cal(cal: Calendar):
     for c in cal.walk():
         if c.name == "VEVENT":
@@ -18,11 +20,12 @@ def print_cal(cal: Calendar):
             print("Ort:", c.get("location"))
             print("---")
 
-def delete_entries(cal: Calendar, name: str) -> Calendar:
+# Delete all entries with the name
+def delete_entries(cal: Calendar, names: list) -> Calendar:
     new_subcomponents = []
     deleted = 0
     for c in cal.subcomponents:
-        if c.name == "VEVENT" and str(c.get("summary")) == name:
+        if c.name == "VEVENT" and str(c.get("summary")) in names:
             deleted += 1
         else:
             new_subcomponents.append(c)
@@ -30,11 +33,12 @@ def delete_entries(cal: Calendar, name: str) -> Calendar:
     print(f"Amount of deleted entries: {deleted}")
     cal.subcomponents = new_subcomponents
 
-def delete_all_but(cal: Calendar, name: str) -> Calendar:
+# Deletes all entries but one 
+def delete_all_but(cal: Calendar, names: list) -> Calendar:
     new_subcomponents = []
     deleted = 0
     for c in cal.subcomponents:
-        if c.name == "VEVENT" and str(c.get("summary")) != name:
+        if c.name == "VEVENT" and str(c.get("summary")) not in names:
             deleted += 1
         else:
             new_subcomponents.append(c)
@@ -43,9 +47,15 @@ def delete_all_but(cal: Calendar, name: str) -> Calendar:
     cal.subcomponents = new_subcomponents
 
 if __name__ == "__main__":
-    path = "example.ics"
-    cal = open_cal(path)
-    delete_all_but(cal, "Datenbanken")
-    #delete_entries(cal, "Datenbanken ÜL-I1")
-    print_cal(cal)
-    export_cal(path, cal)
+    #path = f"/home/YBolleininger/Downloads/Icals/Pflichtmodule/5_Sem_INF_Künstliche_Intelligenz_Gr_3.ics"
+    
+    #keep = ["Computer Grafik ÜL-I6", "Computer Grafik"]
+    
+    #cal = open_cal(path)
+
+    #print_cal(cal)
+
+    #delete_all_but(cal, keep)
+    #print_cal(cal)
+    #export_cal(path, cal)
+    print("hello")
